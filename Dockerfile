@@ -12,17 +12,20 @@ RUN pip install pipenv \
 
 RUN apt-get update && apt-get install -y --no-install-recommends wget tar xz-utils
 
+# Determine architecture and download FFmpeg
 ARG TARGETARCH
 RUN case "$TARGETARCH" in \
-  "amd64") ARCH="linux64" ;  ;; \
-  "arm64") ARCH="linuxarm64" ;; \
-  "arm") ARCH="linuxarm" ;; \
-  *) echo "Unsupported architecture: $TARGETARCH" && exit 1 ;; \
-esac && \
-    mkdir -p /usr/local/bin && \
-    wget -O /tmp/ffmpeg.tar.xz "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-${ARCH}-gpl.tar.xz" && \
-    tar -xvf /tmp/ffmpeg.tar.xz -C /usr/local/bin --strip-components=1 && \
-    rm /tmp/ffmpeg.tar.xz
+    "amd64") ARCH="linux64" ;; \
+    "arm64") ARCH="linuxarm64" ;; \
+    "arm") ARCH="linuxarm" ;; \
+    *) echo "Unsupported architecture: $TARGETARCH" && exit 1 ;; \
+esac
+ENV ARCH=$ARCH
+
+RUN mkdir /usr/bin-new \
+    && wget -O /tmp/ffmpeg.tar.xz "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-$ARCH-gpl.tar.xz" \
+    && tar -xvf /tmp/ffmpeg.tar.xz -C /usr/bin-new/ --strip-components=1 \
+    && rm /tmp/ffmpeg.tar.xz
 
 FROM python:3.13-slim
 

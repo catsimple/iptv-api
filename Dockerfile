@@ -20,10 +20,9 @@ RUN case "$TARGETARCH" in \
     "arm") ARCH="linuxarm" ;; \
     *) echo "Unsupported architecture: $TARGETARCH" && exit 1 ;; \
 esac
-ENV ARCH=$ARCH
 
-RUN mkdir /usr/bin-new \
-    && wget -O /tmp/ffmpeg.tar.xz "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-$ARCH-gpl.tar.xz" \
+RUN  mkdir /usr/bin-new \
+    && wget -O /tmp/ffmpeg.tar.xz "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-${ARCH}-gpl.tar.xz" \
     && tar -xvf /tmp/ffmpeg.tar.xz -C /usr/bin-new/ --strip-components=1 \
     && rm /tmp/ffmpeg.tar.xz
 

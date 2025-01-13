@@ -16,7 +16,6 @@ ARG TARGETARCH
 RUN case "$TARGETARCH" in \
   "amd64") ARCH="linux64" ;; \
   "arm64") ARCH="linuxarm64" ;; \
-  "arm") ARCH="linuxarm" ;; \
   *) echo "Unsupported architecture: $TARGETARCH" && exit 1 ;; \
 esac
 

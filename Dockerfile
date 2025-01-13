@@ -23,7 +23,7 @@ esac
 ENV ARCH=$ARCH
 
 RUN mkdir -p /usr/local/bin \
-    && wget -O /tmp/ffmpeg.tar.xz "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-${ARCH}-gpl.tar.xz" \
+    && wget -O /tmp/ffmpeg.tar.xz "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-$ARCH-gpl.tar.xz" \
     && tar -xvf /tmp/ffmpeg.tar.xz -C /usr/local/bin --strip-components=1 \
     && rm /tmp/ffmpeg.tar.xz
 

@@ -12,10 +12,18 @@ RUN pip install pipenv \
 
 RUN apt-get update && apt-get install -y --no-install-recommends wget tar xz-utils
 
-RUN mkdir /usr/bin-new \
-    && ARCH=$(dpkg --print-architecture) \
-    && wget -O /tmp/ffmpeg.tar.gz https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-${ARCH}-static.tar.xz \
-    && tar -xvf /tmp/ffmpeg.tar.gz -C /usr/bin-new/
+ARG TARGETARCH
+RUN case "$TARGETARCH" in \
+  "amd64") ARCH="linux64" ;; \
+  "arm64") ARCH="linuxarm64" ;; \
+  "arm") ARCH="linuxarm" ;; \
+  *) echo "Unsupported architecture: $TARGETARCH" && exit 1 ;; \
+esac
+
+RUN mkdir -p /usr/local/bin \
+    && wget -O /tmp/ffmpeg.tar.xz "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-${ARCH}-gpl.tar.xz" \
+    && tar -xvf /tmp/ffmpeg.tar.xz -C /usr/local/bin --strip-components=1 \
+    && rm /tmp/ffmpeg.tar.xz
 
 FROM python:3.13-slim
 
